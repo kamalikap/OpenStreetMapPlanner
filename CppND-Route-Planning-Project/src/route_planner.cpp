@@ -10,8 +10,8 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 
     // TODO 2: Use the m_Model.FindClosestNode method to find the closest nodes to the starting and ending coordinates.
     // Store the nodes you find in the RoutePlanner's start_node and end_node attributes.
-	start_node = &model.FindClosestNode(start_x, start_y);
-  	end_node = &model.FindClosestNode(end_x, end_y);
+	start_node = &m_Model.FindClosestNode(start_x, start_y);
+  	end_node = &m_Model.FindClosestNode(end_x, end_y);
   
 }
 
@@ -62,13 +62,13 @@ RouteModel::Node *RoutePlanner::NextNode() {
 	// std::vector<RouteModel::Node*> open_list;
   	
   	std::sort(open_list.begin(), open_list.end(), [] (const RouteModel::Node* node1, const RouteModel::Node* node2) {
-    	float f1_val = node1->g_value + node1->h_value;
-      	float f2_val = node2->g_value + node2->h_value;
-      	return f1_val > f2_val;
+    	// float f1_val = node1->g_value + node1->h_value;
+      	//float f2_val = node2->g_value + node2->h_value;
+      	return (node1->g_value + node1->h_value)  < (node2->g_value + node2->h_value);
     });
 	RouteModel::Node *low;
-  	low = open_list[0];
-  	open_list.pop_back();
+  	low = open_list.front();
+  	open_list.erase(open_list.begin());
   	return low;
 }
 
@@ -114,15 +114,19 @@ void RoutePlanner::AStarSearch() {
     RouteModel::Node *current_node = nullptr;
 
     // TODO: Implement your solution here.
-  	current_node = start_node;
-  	current_node->visited = true;
-  	open_list.push_back(current_node);
+  	start_node->visited = true;
+  	open_list.push_back(start_node);
   	
-  	while(current_node !=end_node) {
-    	AddNeighbors(current_node); 
-      	current_node = NextNode(); 	
-    }
-	m_Model.path = ConstructFinalPath(current_node);
+  	while(open_list.size() > 0) {
+      	current_node = NextNode();
+      
+      	if (current_node->distance(*end_node) == 0){
+        	m_Model.path = ConstructFinalPath(current_node);
+          	return;
+        };
+    	AddNeighbors(current_node);  	
+    };
+	
   	
 }
 
