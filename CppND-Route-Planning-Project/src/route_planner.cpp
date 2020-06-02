@@ -3,21 +3,22 @@
 
 RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, float end_x, float end_y): m_Model(model) {
     // Convert inputs to percentage:
+  //Take start_x, start_y, end_x,end_y and multiply with 0.1 to convert to percentage conversion to use them in m.Model.FindClosestNode.
+
     start_x *= 0.01;
     start_y *= 0.01;
     end_x *= 0.01;
     end_y *= 0.01;
 
-    // TODO 2: Use the m_Model.FindClosestNode method to find the closest nodes to the starting and ending coordinates.
-    // Store the nodes you find in the RoutePlanner's start_node and end_node attributes.
+    //2: The m_Model.FindClosestNode method is used to find the closest nodes to the starting and ending coordinates.
+    // Store the nodes in the RoutePlanner's start_node and end_node attributes.
 	start_node = &m_Model.FindClosestNode(start_x, start_y);
   	end_node = &m_Model.FindClosestNode(end_x, end_y);
   
 }
 
 
-// TODO 3: Implement the CalculateHValue method.
-// Tips:
+// The CalculateHValue method.
 // - You can use the distance to the end_node for the h value.
 // - Node objects have a distance method to determine the distance to another node.
 
@@ -27,7 +28,7 @@ float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
 }
 
 
-// TODO 4: Complete the AddNeighbors method to expand the current node by adding all unvisited neighbors to the open list.
+// The AddNeighbors method expands the current node by adding all unvisited neighbors to the open list.
 // Tips:
 // - Use the FindNeighbors() method of the current_node to populate current_node.neighbors vector with all the neighbors.
 // - For each node in current_node.neighbors, set the parent, the h_value, the g_value. 
@@ -97,6 +98,7 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
   	
   	std::reverse(path_found.begin(), path_found.end());
   
+  	// MetricsScale converts the scale value of the nodes to meters.
     distance *= m_Model.MetricScale(); // Multiply the distance by the scale of the map to get meters.
     return path_found;
 

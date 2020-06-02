@@ -10,6 +10,8 @@
 class RouteModel : public Model {
 
   public:
+  // RouteModel has a subclass Node which also inherits from Model struct Node.  Model struct Node provided x and y co-ordinates.
+
     class Node : public Model::Node {
       public:
         Node * parent = nullptr;
@@ -24,7 +26,12 @@ class RouteModel : public Model {
             return std::sqrt(std::pow((x - other.x), 2) + std::pow((y - other.y), 2));
         }
 
+      	//Default constructor
+
         Node(){}
+      
+      	// Use Model Node to construct RouteModel Node. idx helps keep track of the nodes and also the model where these nodes belong.
+
         Node(int idx, RouteModel * search_model, Model::Node node) : Model::Node(node), parent_model(search_model), index(idx) {}
 
       private:
@@ -32,10 +39,18 @@ class RouteModel : public Model {
         Node * FindNeighbor(std::vector<int> node_indices);
         RouteModel * parent_model = nullptr;
     };
+	
+  // RouteModel constructor takes in the xml file which has the open street map data.
 
     RouteModel(const std::vector<std::byte> &xml);
+  
+  	// Method FindClosest Node allows us to find closest x and y co-ordinates.
     Node &FindClosestNode(float x, float y);
-    auto &SNodes() { return m_Nodes; }
+    
+  	// gettr function which returns vector of nodes. m_Nodes.
+  	auto &SNodes() { return m_Nodes; }
+  
+  	// Vector to store the final path. Starting to end path.
     std::vector<Node> path;
     
   private:

@@ -5,6 +5,8 @@ RouteModel::RouteModel(const std::vector<std::byte> &xml) : Model(xml) {
     // Create RouteModel nodes.
     int counter = 0;
     for (Model::Node node : this->Nodes()) {
+      	// emplace_back is a reference to the object pushed back to the node. It is similar to push_back.
+
         m_Nodes.emplace_back(Node(counter, this, node));
         counter++;
     }

@@ -45,7 +45,8 @@ public:
     };
     
     Model( const std::vector<std::byte> &xml );
-    
+    // These below function returns the vector of the nodes
+
     auto MetricScale() const noexcept { return m_MetricScale; }    
     
     auto &Nodes() const noexcept { return m_Nodes; }
@@ -59,7 +60,10 @@ public:
     
 private:
     void AdjustCoordinates();
+    // BuildRings is used for building objects in the open street map model.
     void BuildRings( Multipolygon &mp );
+    
+    // LoadData parses the heaevy data and stores it in the below vectors.
     void LoadData(const std::vector<std::byte> &xml);
     
     std::vector<Node> m_Nodes;
